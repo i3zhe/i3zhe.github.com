@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[YounG for You]]></title>
+  <link href="http://i3zhe.github.com/atom.xml" rel="self"/>
+  <link href="http://i3zhe.github.com/"/>
+  <updated>2012-10-29T13:54:15+08:00</updated>
+  <id>http://i3zhe.github.com/</id>
+  <author>
+    <name><![CDATA[Jerry Huo]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CSV rendered by fputcsv does not separated correctly]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/"/>
+    <updated>2012-09-03T17:57:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly</id>
+    <content type="html"><![CDATA[<p>Recently I am working on a feature which exports the data presented on the web page to a csv file. That&#8217;s pretty easy, huh? The only trouble is the web site was built with <strong>Yii Framework</strong>&#8230;</p>
+
+<p>Luckily, I found there&#8217;s already an light-weight extention called <a href="http://www.yiiframework.com/extension/csvexport">csvexport</a> and you can find it here http://www.yiiframework.com/extension/csvexport</p>
+
+<p>The usage example is pretty clear:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> Yii::import(&#39;ext.ECSVExport&#39;);</span>
+</span><span class='line'><span class="x"> // CDbCommand</span>
+</span><span class='line'><span class="x"> $cmd = Yii::app()-&gt;db-&gt;createCommand(&quot;SELECT * FROM track_test LIMIT 10&quot;);    </span>
+</span><span class='line'><span class="x"> $csv = new ECSVExport($cmd);       </span>
+</span><span class='line'><span class="x"> $exclude = array(&#39;id&#39;, &#39;deleted&#39;, &#39;prefix&#39;);</span>
+</span><span class='line'><span class="x"> $csv-&gt;setExclude($exclude);</span>
+</span><span class='line'><span class="x"> $csv-&gt;setOutputFile($outputFile);</span>
+</span><span class='line'><span class="x"> $content = $csv-&gt;toCSV();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>if you would like to download csv from browser instead of writing to a file, add this line:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> Yii::app()-&gt;getRequest()-&gt;sendFile(&#39;export.csv&#39;, $content, &quot;text/csv&quot;, false);</span>
+</span><span class='line'><span class="x"> exit;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Everything goes well so far. But when I open the new csv file with Excel 2008 (Mac), I found there&#8217;s a problem for human reading, because all data (more than 10 columns) are crowded in the first column, not separated by comma at all!!!</p>
+
+<p>I checked the csv file carefully by opening it with textmate and found it&#8217;s rendering correctly, although not all data have the double quote enclosure. It does not effect the result.</p>
+
+<p>The &#8220;csvexport&#8221; lib is using <a href="http://cn.php.net/manual/en/function.fputcsv.php">fputcsv</a> to render csv.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> fputcsv($this-&gt;_filePointer, $headers, $this-&gt;_delimiter, $this-&gt;_enclosure);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The default delimiter is comma - &#8220;,&#8221; how about changing it to another one? Let&#8217;s try semicolon, Oops!!! It&#8217;s working great now.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> fputcsv($this-&gt;_filePointer, $headers, &quot;;&quot;, $this-&gt;_enclosure);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Is it a Microsoft Office bug or php bug? Let me know your idea!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[fsockopen error - failed to parse address]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/05/28/fsockopen-error-failed-to-parse-address/"/>
+    <updated>2012-05-28T14:24:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/05/28/fsockopen-error-failed-to-parse-address</id>
+    <content type="html"><![CDATA[<p>Just met this error when using MailPress plugin in WordPress.
+on file</p>
+
+<p><code>"wp-content/plugins/mailpress/mp-includes/Swiftmailer/classes/Swift/Transport/StreamBuffer.php" Line 233</code></p>
+
+<pre><code>    if (!$this-&gt;_stream = fsockopen($host, $this-&gt;_params['port'], $errno, $errstr, $timeout))
+    {
+      throw new Swift_TransportException(
+        'Connection could not be established with host ' . $this-&gt;_params['host'] .
+        ' [' . $errstr . ' #' . $errno . ']'
+        );
+    }
+</code></pre>
+
+<p>Checked the php manual:
+<a href="http://cn.php.net/manual/en/function.fsockopen.php">fsockopen</a>
+It says</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">resource fsockopen ( string $hostname [, int $port = -1 [, int &amp;$errno [, string &amp;$errstr [, float $timeout = ini_get(&quot;default_socket_timeout&quot;) ]]]] )</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>After some research, I found that <strong>we can&#8217;t leave the port parameter empty, although it is stated optional</strong>.</p>
+
+<p>This can be traced to C function &#8220;parse_ip_address_ex&#8221;, it needs a colon to separate IP and port number in the textual address it is passed.</p>
+
+<p>Refer from <a href="http://forum.caravelgames.com/viewtopic.php?TopicID=16512">this topic</a></p>
+
+<p>So the solution is simple, either add a port behind the server&#8217;s address, or specify a port as the second parameter.</p>
+
+<figure class='code'><figcaption><span>Simple Solution  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com:25&#39;);</span>
+</span><span class='line'><span class="x">or</span>
+</span><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com&#39;, 25);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Of course we won&#8217;t change the MailPress&#8217;s source code, just change the MailPress settings on the dashboard :)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[First Post]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/02/29/first-post/"/>
+    <updated>2012-02-29T10:49:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/02/29/first-post</id>
+    <content type="html"><![CDATA[<p><strong>Hello Octopress!</strong>
+This an example post for more information see:</p>
+]]></content>
+  </entry>
+  
+</feed>

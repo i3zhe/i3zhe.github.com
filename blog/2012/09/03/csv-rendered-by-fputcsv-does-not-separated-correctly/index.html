@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>YounG for You</title>
+  <title>CSV rendered by fputcsv does not separated correctly - YounG for You</title>
   <meta name="author" content="Jerry Huo">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://i3zhe.github.com">
+  <link rel="canonical" href="http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -62,15 +62,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/">CSV Rendered by Fputcsv Does Not Separated Correctly</a></h1>
+      <h1 class="entry-title">CSV Rendered by Fputcsv Does Not Separated Correctly</h1>
     
     
       <p class="meta">
@@ -93,7 +90,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Recently I am working on a feature which exports the data presented on the web page to a csv file. That&#8217;s pretty easy, huh? The only trouble is the web site was built with <strong>Yii Framework</strong>&#8230;</p>
+<div class="entry-content"><p>Recently I am working on a feature which exports the data presented on the web page to a csv file. That&#8217;s pretty easy, huh? The only trouble is the web site was built with <strong>Yii Framework</strong>&#8230;</p>
 
 <p>Luckily, I found there&#8217;s already an light-weight extention called <a href="http://www.yiiframework.com/extension/csvexport">csvexport</a> and you can find it here http://www.yiiframework.com/extension/csvexport</p>
 
@@ -147,99 +144,16 @@
 
 <p>Is it a Microsoft Office bug or php bug? Let me know your idea!</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/28/fsockopen-error-failed-to-parse-address/">Fsockopen Error - Failed to Parse Address</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Jerry Huo</span></span>
 
-<time datetime="2012-05-28T14:24:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just met this error when using MailPress plugin in WordPress.
-on file</p>
-
-<p><code>"wp-content/plugins/mailpress/mp-includes/Swiftmailer/classes/Swift/Transport/StreamBuffer.php" Line 233</code></p>
-
-<pre><code>    if (!$this-&gt;_stream = fsockopen($host, $this-&gt;_params['port'], $errno, $errstr, $timeout))
-    {
-      throw new Swift_TransportException(
-        'Connection could not be established with host ' . $this-&gt;_params['host'] .
-        ' [' . $errstr . ' #' . $errno . ']'
-        );
-    }
-</code></pre>
-
-<p>Checked the php manual:
-<a href="http://cn.php.net/manual/en/function.fsockopen.php">fsockopen</a>
-It says</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">resource fsockopen ( string $hostname [, int $port = -1 [, int &amp;$errno [, string &amp;$errstr [, float $timeout = ini_get(&quot;default_socket_timeout&quot;) ]]]] )</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After some research, I found that <strong>we can&#8217;t leave the port parameter empty, although it is stated optional</strong>.</p>
-
-<p>This can be traced to C function &#8220;parse_ip_address_ex&#8221;, it needs a colon to separate IP and port number in the textual address it is passed.</p>
-
-<p>Refer from <a href="http://forum.caravelgames.com/viewtopic.php?TopicID=16512">this topic</a></p>
-
-<p>So the solution is simple, either add a port behind the server&#8217;s address, or specify a port as the second parameter.</p>
-
-<figure class='code'><figcaption><span>Simple Solution  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com:25&#39;);</span>
-</span><span class='line'><span class="x">or</span>
-</span><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com&#39;, 25);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course we won&#8217;t change the MailPress&#8217;s source code, just change the MailPress settings on the dashboard :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/29/first-post/">First Post</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -251,28 +165,38 @@ It says</p>
   
 
 
-<time datetime="2012-02-29T10:49:00+08:00" pubdate data-updated="true">Feb 29<span>th</span>, 2012</time>
-        
-      </p>
+<time datetime="2012-09-03T17:57:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/php-csv-yii/'>php,csv,yii</a>
+  
+</span>
+
+
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p><strong>Hello Octopress!</strong>
-This an example post for more information see:</p>
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/" data-via="young4u_amy" data-counturl="http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/05/28/fsockopen-error-failed-to-parse-address/" title="Previous Post: fsockopen error - failed to parse address">&laquo; fsockopen error - failed to parse address</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -297,7 +221,7 @@ This an example post for more information see:</p>
 <section>
   <h1>Github Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/i3zhe">@i3zhe</a> on Github
@@ -327,7 +251,7 @@ This an example post for more information see:</p>
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -346,6 +270,7 @@ This an example post for more information see:</p>
 
   
 </aside>
+
 
     </div>
   </div>

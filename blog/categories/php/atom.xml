@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: PHP | YounG for You]]></title>
+  <link href="http://i3zhe.github.com/blog/categories/php/atom.xml" rel="self"/>
+  <link href="http://i3zhe.github.com/"/>
+  <updated>2012-10-29T13:54:15+08:00</updated>
+  <id>http://i3zhe.github.com/</id>
+  <author>
+    <name><![CDATA[Jerry Huo]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[fsockopen error - failed to parse address]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/05/28/fsockopen-error-failed-to-parse-address/"/>
+    <updated>2012-05-28T14:24:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/05/28/fsockopen-error-failed-to-parse-address</id>
+    <content type="html"><![CDATA[<p>Just met this error when using MailPress plugin in WordPress.
+on file</p>
+
+<p><code>"wp-content/plugins/mailpress/mp-includes/Swiftmailer/classes/Swift/Transport/StreamBuffer.php" Line 233</code></p>
+
+<pre><code>    if (!$this-&gt;_stream = fsockopen($host, $this-&gt;_params['port'], $errno, $errstr, $timeout))
+    {
+      throw new Swift_TransportException(
+        'Connection could not be established with host ' . $this-&gt;_params['host'] .
+        ' [' . $errstr . ' #' . $errno . ']'
+        );
+    }
+</code></pre>
+
+<p>Checked the php manual:
+<a href="http://cn.php.net/manual/en/function.fsockopen.php">fsockopen</a>
+It says
+<code>php
+resource fsockopen ( string $hostname [, int $port = -1 [, int &amp;$errno [, string &amp;$errstr [, float $timeout = ini_get("default_socket_timeout") ]]]] )
+</code></p>
+
+<p>After some research, I found that <strong>we can't leave the port parameter empty, although it is stated optional</strong>.</p>
+
+<p>This can be traced to C function "parse_ip_address_ex", it needs a colon to separate IP and port number in the textual address it is passed.</p>
+
+<p>Refer from <a href="http://forum.caravelgames.com/viewtopic.php?TopicID=16512">this topic</a></p>
+
+<p>So the solution is simple, either add a port behind the server's address, or specify a port as the second parameter.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Simple Solution  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com:25&#39;);</span>
+</span><span class='line'><span class="x">or</span>
+</span><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com&#39;, 25);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Of course we won't change the MailPress's source code, just change the MailPress settings on the dashboard :)</p>
+]]></content>
+  </entry>
+  
+</feed>

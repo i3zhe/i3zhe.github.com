@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
+    <url>
+        <loc>http://i3zhe.github.com/blog/2012/02/29/first-post/</loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://i3zhe.github.com/blog/2012/05/28/fsockopen-error-failed-to-parse-address/
+        </loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/
+        </loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://i3zhe.github.com/about/</loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://i3zhe.github.com/blog/archives/</loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://i3zhe.github.com/</loc>
+        <lastmod>2012-10-29T12:19:03+08:00</lastmod>
+    </url>
+</urlset>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: php,csv,yii | YounG for You]]></title>
+  <link href="http://i3zhe.github.com/blog/categories/php-csv-yii/atom.xml" rel="self"/>
+  <link href="http://i3zhe.github.com/"/>
+  <updated>2012-10-29T13:54:15+08:00</updated>
+  <id>http://i3zhe.github.com/</id>
+  <author>
+    <name><![CDATA[Jerry Huo]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CSV rendered by fputcsv does not separated correctly]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/"/>
+    <updated>2012-09-03T17:57:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly</id>
+    <content type="html"><![CDATA[<p>Recently I am working on a feature which exports the data presented on the web page to a csv file. That's pretty easy, huh? The only trouble is the web site was built with <strong>Yii Framework</strong>...</p>
+
+<p>Luckily, I found there's already an light-weight extention called <a href="http://www.yiiframework.com/extension/csvexport">csvexport</a> and you can find it here http://www.yiiframework.com/extension/csvexport</p>
+
+<p>The usage example is pretty clear:
+```php</p>
+
+<pre><code> Yii::import('ext.ECSVExport');
+ // CDbCommand
+ $cmd = Yii::app()-&gt;db-&gt;createCommand("SELECT * FROM track_test LIMIT 10");    
+ $csv = new ECSVExport($cmd);       
+ $exclude = array('id', 'deleted', 'prefix');
+ $csv-&gt;setExclude($exclude);
+ $csv-&gt;setOutputFile($outputFile);
+ $content = $csv-&gt;toCSV();
+</code></pre>
+
+<p>```</p>
+
+<p>if you would like to download csv from browser instead of writing to a file, add this line:
+```php</p>
+
+<pre><code> Yii::app()-&gt;getRequest()-&gt;sendFile('export.csv', $content, "text/csv", false);
+ exit;
+</code></pre>
+
+<p>```</p>
+
+<p>Everything goes well so far. But when I open the new csv file with Excel 2008 (Mac), I found there's a problem for human reading, because all data (more than 10 columns) are crowded in the first column, not separated by comma at all!!!</p>
+
+<p>I checked the csv file carefully by opening it with textmate and found it's rendering correctly, although not all data have the double quote enclosure. It does not effect the result.</p>
+
+<p>The "csvexport" lib is using <a href="http://cn.php.net/manual/en/function.fputcsv.php">fputcsv</a> to render csv.
+```php</p>
+
+<pre><code> fputcsv($this-&gt;_filePointer, $headers, $this-&gt;_delimiter, $this-&gt;_enclosure);
+</code></pre>
+
+<p>```</p>
+
+<p>The default delimiter is comma - "," how about changing it to another one? Let's try semicolon, Oops!!! It's working great now.
+```php</p>
+
+<pre><code> fputcsv($this-&gt;_filePointer, $headers, ";", $this-&gt;_enclosure);
+</code></pre>
+
+<p>```</p>
+
+<p>Is it a Microsoft Office bug or php bug? Let me know your idea!</p>
+]]></content>
+  </entry>
+  
+</feed>
