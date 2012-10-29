@@ -4,7 +4,7 @@
   <title><![CDATA[YounG for You]]></title>
   <link href="http://i3zhe.github.com/atom.xml" rel="self"/>
   <link href="http://i3zhe.github.com/"/>
-  <updated>2012-10-29T13:54:15+08:00</updated>
+  <updated>2012-10-29T17:28:53+08:00</updated>
   <id>http://i3zhe.github.com/</id>
   <author>
     <name><![CDATA[Jerry Huo]]></name>
@@ -12,6 +12,421 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[【翻译】如何制作自己的GEM]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/"/>
+    <updated>2012-10-29T14:00:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem</id>
+    <content type="html"><![CDATA[<p>原文链接： <a href="http://guides.rubygems.org/make-your-own-gem/">猛击这里</a></p>
+
+<p>今天这个会，我们将学习如何把你的ruby代码打包成外卖（pia！开会开出瘾了？外卖个头，你个吃货！ 是gem啊！）</p>
+
+<ul>
+<li><a href="#intro">介绍</a></li>
+<li><a href="#first_gem">处女gem</a></li>
+<li><a href="#more-files">包含更多文件</a></li>
+<li><a href="#executable">添加可执行文件</a></li>
+<li><a href="#writing-tests">写测试</a></li>
+<li><a href="#document-code">给gem写文档</a></li>
+<li><a href="#wrapup">总结</a></li>
+</ul>
+
+
+<hr>
+
+
+<p><a id="intro"></a></p>
+
+<h2 id="intro">介绍</h2>
+
+
+<p>感谢RubyGems内嵌的一个工具，让我们创建和发布gem变得非常简单。下面我们来制作一个简单的“hello 女神”gem，大家回家以后可以随便耍耍！ 我们要做的这个gem的代码已经在<a href="https://github.com/qrush/hola">github</a>安家了，需要的猛击。</p>
+
+<hr>
+
+
+<p><a id="first_gem"></a></p>
+
+<h2 id="first_gem">处女gem</h2>
+
+
+<p>我将从一个ruby文件开始来创建这个女神gem，还有她的闺蜜gemspec。你愿意的话可以给这个gem起个新名字来发布（或许是波多野结衣神马的，你懂的）。查阅并参考一下官方<a href="http://guides.rubygems.org/patterns/#consistent-naming">样式向导</a>的基本推荐来命名你的Gem。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% tree
+</span><span class='line'>.
+</span><span class='line'>├── nvshen.gemspec
+</span><span class='line'>└── lib
+</span><span class='line'>    └── nvshen.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Gem的代码主要放置在<code>lib</code>目录下。通常的原则是让一个ruby文件和你的gem名字相同，因为当<code>require 'nvshen'</code>运行时，她会自动被加载。她的闺蜜文件是负责设置你的gem代码和API。</p>
+
+<p><code>lib/nvshen.rb</code>里的代码是非常柔弱无骨的。它只是保证你可以看到女神gem会有些输出：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat lib/nvshen.rb
+</span><span class='line'>class Nvshen
+</span><span class='line'>  def self.hi
+</span><span class='line'>    puts "Hello Nvshen!"
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>gemspec文件定义了gem的内容，作者，还有gem的版本。它也是你通往<a href="http://www.rubygems.org">RubyGems.org</a>的介绍信。你在一个gem上所能看到的所有信息(象<a href="http://rubygems.org/gems/jekyll">jekyll</a>)都来自这个闺蜜文件-gemspec。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat hola.gemspec
+</span><span class='line'>Gem::Specification.new do |s|
+</span><span class='line'>  s.name        = 'nvshen'
+</span><span class='line'>  s.version     = '0.0.0'
+</span><span class='line'>  s.date        = '2012-12-29'
+</span><span class='line'>  s.summary     = "Nvshen!"
+</span><span class='line'>  s.description = "A simple hello nvshen gem"
+</span><span class='line'>  s.authors     = ["Jerry Huo"]
+</span><span class='line'>  s.email       = 'hjzdhr@163.com'
+</span><span class='line'>  s.files       = ["lib/nvshen.rb"]
+</span><span class='line'>  s.homepage    =
+</span><span class='line'>    'http://rubygems.org/gems/hola'
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>脸熟吧？这个闺蜜gemspec也是ruby系的，所以你可以写脚本来生成文件名和更改版本号。这个闺蜜妹子还有很多内置参数，感兴趣的请猛击<a href="http://guides.rubygems.org/specification-reference">这里</a>。</p>
+
+<p>当你创建完这个gemspec文件后，你就可以通过它构建一个gem了。然后在本地安装这个gem来进行测试。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% gem build nvshen.gemspec
+</span><span class='line'>Successfully built RubyGem
+</span><span class='line'>Name: nvshen
+</span><span class='line'>Version: 0.0.0
+</span><span class='line'>File: nvshen-0.0.0.gem
+</span><span class='line'>
+</span><span class='line'>% gem install ./nvshen-0.0.0.gem
+</span><span class='line'>Successfully installed nvshen-0.0.0
+</span><span class='line'>1 gem installed</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这个迷烟测试还没有结束：最后一步就是<code>require</code>此gem并调戏她：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% irb
+</span><span class='line'>&gt;&gt; require 'nvshen'
+</span><span class='line'>=&gt; true
+</span><span class='line'>&gt;&gt; Nvshen.hi
+</span><span class='line'>Hello world!</span></code></pre></td></tr></table></div></figure>
+
+
+<p><em>如果你使用的ruby版本低于1.9.2，你需要使用<code>irb -rubygems</code>，或者运行irb之后再require rubygems库</em></p>
+
+<p>现在你可以和ruby社区的其他人一起分享女神这个gem。假设你已经有了一个账户， 把你的gem发布到RubyGems.org只需要一个命令。按下面提示在你的电脑上设置你的RubyGems账户：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ curl -u YOUR_USER_NAME https://rubygems.org/api/v1/api_key.yaml &gt;
+</span><span class='line'>~/.gem/credentials
+</span><span class='line'>Enter host password for user 'YOUR_USER_NAME':</span></code></pre></td></tr></table></div></figure>
+
+
+<p>设好这一步，你就可以推出你的新Gem了：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% gem push nvshen-0.0.0.gem
+</span><span class='line'>Pushing gem to RubyGems.org...
+</span><span class='line'>Successfully registered gem: nvshen (0.0.0)</span></code></pre></td></tr></table></div></figure>
+
+
+<p>很短的时间之内（通常不超过一年），任何人都可以安装你的gem了。你可以在<a href="https://rubygems.org/gems/hola">RubyGems.org</a>上看到她，或者通过RubyGems.org上在任何计算机上得到她。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% gem list -r nvshen
+</span><span class='line'>
+</span><span class='line'>*** REMOTE GEMS ***
+</span><span class='line'>
+</span><span class='line'>nvshen (0.0.0)
+</span><span class='line'>
+</span><span class='line'>% gem install nvshen
+</span><span class='line'>Successfully installed nvshen-0.0.0
+</span><span class='line'>1 gem installed</span></code></pre></td></tr></table></div></figure>
+
+
+<p>用Ruby和RubyGems分享代码实在是太轻松了。</p>
+
+<hr />
+
+<p><a id="more-files"></a></p>
+
+<h2>包含更多文件</h2>
+
+
+<p>把所有东西放在一个文件里会影响扩展。我们再让女神丰满点。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat lib/nvshen.rb
+</span><span class='line'>class Nvshen
+</span><span class='line'>  def self.hi(language = "english")
+</span><span class='line'>    translator = Translator.new(language)
+</span><span class='line'>    puts translator.hi
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>class Nvshen::Translator
+</span><span class='line'>  def initialize(language)
+</span><span class='line'>    @language = language
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def hi
+</span><span class='line'>    case @language
+</span><span class='line'>    when "chinese"
+</span><span class='line'>      "你好 女神"
+</span><span class='line'>    else
+</span><span class='line'>      "hello nvshen"
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>女神变得有点臃肿。让我们把<code>Translator</code>分解成单独的文件。如前面提到的，gem根目录那个文件是负责加载gem的代码。gem的其他文件通常放置在<code>lib</code>文件夹下与gem同名的目录底下。我们可以把这个gem分解成这样：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% tree
+</span><span class='line'>.
+</span><span class='line'>├── nvshen.gemspec
+</span><span class='line'>└── lib
+</span><span class='line'>    ├── nvshen
+</span><span class='line'>    │   └── translator.rb
+</span><span class='line'>    └── nvshen.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>Translator</code>现在位于<code>lib/nvshen</code>目录下，我们可以通过<code>require</code>方式在<code>lib/nvshen.rb</code>里轻松的调用它。<code>Translator</code>的代码并没有多大差异：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat lib/nvshen/translator.rb
+</span><span class='line'>class Nvshen::Translator
+</span><span class='line'>  def initialize(language)
+</span><span class='line'>    @language = language
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def hi
+</span><span class='line'>    case @language
+</span><span class='line'>    when :chinese
+</span><span class='line'>      "你好 女神"
+</span><span class='line'>    else
+</span><span class='line'>      "hello nvshen"
+</span><span class='line'>    end
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>但现在<code>nvshen.rb</code>里需要增加一点代码来加载<code>Translator</code>:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat lib/nvshen.rb
+</span><span class='line'>class Nvshen
+</span><span class='line'>  def self.hi(language = :english)
+</span><span class='line'>    translator = Translator.new(language)
+</span><span class='line'>    translator.hi
+</span><span class='line'>  end
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>require 'nvshen/translator'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>接下来试一试，启动<code>irb</code>：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% irb -Ilib -rnvshen
+</span><span class='line'>irb(main):001:0&gt; Nvshen.hi(:english)
+</span><span class='line'>=&gt; "hello nvshen"
+</span><span class='line'>irb(main):002:0&gt; nvshen.hi(:chinese)
+</span><span class='line'>=&gt; "你好 女神"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里我们需要用到一个奇怪的命令行标志<code>-Ilib</code>. 通常RubyGems会自动替你引用<code>lib</code>目录，所以终端用户通常不需要为配置加载路径而担忧。 然而，如果你是在RubyGems之外的环境运行代码，你就需要自己配置这些东西。可能有人会在代码里操作<code>$LOAD_PATH</code>，但那通常被视为反面示范。在这个<a href="http://guides.rubygems.org/patterns">向导</a>里有很多反面示例（当然也有正面示例）。</p>
+
+<p>如果你在gem里添加了许多文件，千万要记得在发布前把他们加到gemspec的file数组里。因此，许多开发者通过<a href="http://seattlerb.rubyforge.org/hoe/">Hoe</a>, <a href="https://github.com/technicalpickles/jeweler">Jeweler</a>, <a href="http://rake.rubyforge.org/classes/Rake/GemPackageTask.html">Rake</a>, <a href="http://railscasts.com/episodes/245-new-gem-with-bundler">Bundler</a> 来自动化此步骤，或者直接使用动态gemspec。</p>
+
+<p>从这开始，再通过添加更多代码来增加更多目录都是相同的步骤。尽可能合理的分割ruby文件。使你的项目井然有序将帮助你自己和未来的维护者减少头疼和麻烦。</p>
+
+<hr>
+
+
+<p><a id="executable"></a></p>
+
+<h2>添加可执行文件</h2>
+
+
+<p>Gem除了可以提供ruby代码的库，还可以曝光一个或多个可执行文件到shell的<code>PATH</code>上。可能最知名的例子就是<code>rake</code>了。另一个非常有用的是<code>prettify_json.rb</code>, 包含在<code>JSON</code>的gem里。 它可以把JSON格式化成更可读的形式（ruby1.9众也内置了它）。例子如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% curl -s http://jsonip.com/ | \
+</span><span class='line'>  prettify_json.rb
+</span><span class='line'>{
+</span><span class='line'>  "ip": "24.60.248.134"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>给gem添加可执行文件的步骤非常简单。你只需要把那个文件放在gem的<code>bin</code>目录底下，然后把它加到gemspec的可执行文件的列表里。咱们来给女神gem添加一个。第一步创建文件并让她可以执行：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% mkdir bin
+</span><span class='line'>% touch bin/hola
+</span><span class='line'>% chmod a+x bin/hola</span></code></pre></td></tr></table></div></figure>
+
+
+<p>可执行文件本身需要一个<code>[shebang](http://www.catb.org/jargon/html/S/shebang.html)</code>来制定是运行什么程序。下面的女神的文件示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat bin/nvshen
+</span><span class='line'>#!/usr/bin/env ruby
+</span><span class='line'>
+</span><span class='line'>require 'nvshen'
+</span><span class='line'>puts Nvshen.hi(ARGV[0])</span></code></pre></td></tr></table></div></figure>
+
+
+<p>她的作用就是加载女神gem，然后把命令行第一个参数作为语言的变量来输出结果。下面是运行示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% ruby -Ilib ./bin/hola
+</span><span class='line'>hello world
+</span><span class='line'>
+</span><span class='line'>% ruby -Ilib ./bin/hola chinese
+</span><span class='line'>你好 女神</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后，为了使你发布gem的时候，可执行文件被包括其中，你需要把它加到gemspec中：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% head -4 nvshen.gemspec
+</span><span class='line'>Gem::Specification.new do |s|
+</span><span class='line'>  s.name        = 'nvshen'
+</span><span class='line'>  s.version     = '0.0.1'
+</span><span class='line'>  s.executables &lt;&lt; 'nvshen'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>推送新gem，你就可以发布自己的命令行工具。需要的话，你可以添加更多的可执行文件，记得也把他们加到gemspec里面的<code>executables</code>的数组。</p>
+
+<p><em>注意：你推送一个新发布时，需要加上新的版本号，更多有关Gem版本的资料，请猛击<a href="http://guides.rubygems.org/patterns/#semantic-versioning">Pattern Guide</a></em></p>
+
+<p><strong><em>未完待续（稍后更新测试）</em></strong></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[CSV rendered by fputcsv does not separated correctly]]></title>

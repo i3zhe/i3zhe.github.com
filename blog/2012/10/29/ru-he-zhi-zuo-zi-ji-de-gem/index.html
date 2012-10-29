@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>YounG for You</title>
+  <title>【翻译】如何制作自己的GEM - YounG for You</title>
   <meta name="author" content="Jerry Huo">
 
   
@@ -24,7 +24,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://i3zhe.github.com">
+  <link rel="canonical" href="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -68,15 +68,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/">【翻译】如何制作自己的GEM</a></h1>
+      <h1 class="entry-title">【翻译】如何制作自己的GEM</h1>
     
     
       <p class="meta">
@@ -99,7 +96,7 @@
   </header>
 
 
-  <div class="entry-content"><p>原文链接： <a href="http://guides.rubygems.org/make-your-own-gem/">猛击这里</a></p>
+<div class="entry-content"><p>原文链接： <a href="http://guides.rubygems.org/make-your-own-gem/">猛击这里</a></p>
 
 <p>今天这个会，我们将学习如何把你的ruby代码打包成外卖（pia！开会开出瘾了？外卖个头，你个吃货！ 是gem啊！）</p>
 
@@ -507,110 +504,16 @@
 
 <p><strong><em>未完待续（稍后更新测试）</em></strong></p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/">CSV Rendered by Fputcsv Does Not Separated Correctly</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">Jerry Huo</span></span>
 
-<time datetime="2012-09-03T17:57:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Recently I am working on a feature which exports the data presented on the web page to a csv file. That&#8217;s pretty easy, huh? The only trouble is the web site was built with <strong>Yii Framework</strong>&#8230;</p>
-
-<p>Luckily, I found there&#8217;s already an light-weight extention called <a href="http://www.yiiframework.com/extension/csvexport">csvexport</a> and you can find it here http://www.yiiframework.com/extension/csvexport</p>
-
-<p>The usage example is pretty clear:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> Yii::import(&#39;ext.ECSVExport&#39;);</span>
-</span><span class='line'><span class="x"> // CDbCommand</span>
-</span><span class='line'><span class="x"> $cmd = Yii::app()-&gt;db-&gt;createCommand(&quot;SELECT * FROM track_test LIMIT 10&quot;);    </span>
-</span><span class='line'><span class="x"> $csv = new ECSVExport($cmd);       </span>
-</span><span class='line'><span class="x"> $exclude = array(&#39;id&#39;, &#39;deleted&#39;, &#39;prefix&#39;);</span>
-</span><span class='line'><span class="x"> $csv-&gt;setExclude($exclude);</span>
-</span><span class='line'><span class="x"> $csv-&gt;setOutputFile($outputFile);</span>
-</span><span class='line'><span class="x"> $content = $csv-&gt;toCSV();</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>if you would like to download csv from browser instead of writing to a file, add this line:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> Yii::app()-&gt;getRequest()-&gt;sendFile(&#39;export.csv&#39;, $content, &quot;text/csv&quot;, false);</span>
-</span><span class='line'><span class="x"> exit;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Everything goes well so far. But when I open the new csv file with Excel 2008 (Mac), I found there&#8217;s a problem for human reading, because all data (more than 10 columns) are crowded in the first column, not separated by comma at all!!!</p>
-
-<p>I checked the csv file carefully by opening it with textmate and found it&#8217;s rendering correctly, although not all data have the double quote enclosure. It does not effect the result.</p>
-
-<p>The &#8220;csvexport&#8221; lib is using <a href="http://cn.php.net/manual/en/function.fputcsv.php">fputcsv</a> to render csv.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> fputcsv($this-&gt;_filePointer, $headers, $this-&gt;_delimiter, $this-&gt;_enclosure);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>The default delimiter is comma - &#8220;,&#8221; how about changing it to another one? Let&#8217;s try semicolon, Oops!!! It&#8217;s working great now.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x"> fputcsv($this-&gt;_filePointer, $headers, &quot;;&quot;, $this-&gt;_enclosure);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Is it a Microsoft Office bug or php bug? Let me know your idea!</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/05/28/fsockopen-error-failed-to-parse-address/">Fsockopen Error - Failed to Parse Address</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -622,105 +525,32 @@
   
 
 
-<time datetime="2012-05-28T14:24:00+08:00" pubdate data-updated="true">May 28<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Just met this error when using MailPress plugin in WordPress.
-on file</p>
-
-<p><code>"wp-content/plugins/mailpress/mp-includes/Swiftmailer/classes/Swift/Transport/StreamBuffer.php" Line 233</code></p>
-
-<pre><code>    if (!$this-&gt;_stream = fsockopen($host, $this-&gt;_params['port'], $errno, $errstr, $timeout))
-    {
-      throw new Swift_TransportException(
-        'Connection could not be established with host ' . $this-&gt;_params['host'] .
-        ' [' . $errstr . ' #' . $errno . ']'
-        );
-    }
-</code></pre>
-
-<p>Checked the php manual:
-<a href="http://cn.php.net/manual/en/function.fsockopen.php">fsockopen</a>
-It says</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">resource fsockopen ( string $hostname [, int $port = -1 [, int &amp;$errno [, string &amp;$errstr [, float $timeout = ini_get(&quot;default_socket_timeout&quot;) ]]]] )</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>After some research, I found that <strong>we can&#8217;t leave the port parameter empty, although it is stated optional</strong>.</p>
-
-<p>This can be traced to C function &#8220;parse_ip_address_ex&#8221;, it needs a colon to separate IP and port number in the textual address it is passed.</p>
-
-<p>Refer from <a href="http://forum.caravelgames.com/viewtopic.php?TopicID=16512">this topic</a></p>
-
-<p>So the solution is simple, either add a port behind the server&#8217;s address, or specify a port as the second parameter.</p>
-
-<figure class='code'><figcaption><span>Simple Solution  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='php'><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com:25&#39;);</span>
-</span><span class='line'><span class="x">or</span>
-</span><span class='line'><span class="x">fsockopen(&#39;relay.xxx.com&#39;, 25);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Of course we won&#8217;t change the MailPress&#8217;s source code, just change the MailPress settings on the dashboard :)</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2012-10-29T14:00:00+08:00" pubdate data-updated="true">Oct 29<span>th</span>, 2012</time>
       
-  <header>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2012/02/29/first-post/">First Post</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
+      <div class="sharing">
   
-
-
-<time datetime="2012-02-29T10:49:00+08:00" pubdate data-updated="true">Feb 29<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><strong>Hello Octopress!</strong>
-This an example post for more information see:</p>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/" data-via="young4u_amy" data-counturl="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/" title="Previous Post: CSV rendered by fputcsv does not separated correctly">&laquo; CSV rendered by fputcsv does not separated correctly</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
-    </article>
-  
-  <div class="pagination">
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
 </div>
+
 <aside class="sidebar">
   
     <section>
@@ -749,7 +579,7 @@ This an example post for more information see:</p>
 <section>
   <h1>Github Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/i3zhe">@i3zhe</a> on Github
@@ -779,7 +609,7 @@ This an example post for more information see:</p>
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -798,6 +628,7 @@ This an example post for more information see:</p>
 
   
 </aside>
+
 
     </div>
   </div>
