@@ -121,7 +121,7 @@ end
 <a id="wrapup"></a>
 <h2>总结</h2>
 
-有了一个构建RubyGem的基本理解，我们希望你将去亲自实践。
+有了一个构建RubyGem的基本思路，我们希望你将去亲自实践。
 
 <hr>
 <a id="credits"></a>
