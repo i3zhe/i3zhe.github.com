@@ -1,0 +1,487 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>如何制作自己的gem （二） - YounG for You</title>
+  <meta name="author" content="Jerry Huo">
+
+  
+  <meta name="description" content="接上篇，如何制作自己的GEM (一) 写测试
+给gem写文档
+总结 写测试 泰斯特你的gem是贼拉的重要！它不仅帮助你确认你的代码是可以运行的，而且它也帮助别人了解你的gem是顺利工作的。当衡量一个gem时，ruby开发者倾向于通过查看一套可靠的测试（或者说由于缺少测试） &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="YounG for You" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">YounG for You</a></h1>
+  
+    <h2>don't be only father of your children</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:i3zhe.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">如何制作自己的gem （二）</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-31T11:17:00+08:00" pubdate data-updated="true">Oct 31<span>st</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>接上篇，<a href="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/">如何制作自己的GEM (一)</a></p>
+
+<ul>
+<li><a href="#writing-tests">写测试</a></li>
+<li><a href="#document-code">给gem写文档</a></li>
+<li><a href="#wrapup">总结</a>
+<a id="writing-tests"></a></li>
+</ul>
+
+
+<h2>写测试</h2>
+
+
+<p>泰斯特你的gem是贼拉的重要！它不仅帮助你确认你的代码是可以运行的，而且它也帮助别人了解你的gem是顺利工作的。当衡量一个gem时，ruby开发者倾向于通过查看一套可靠的测试（或者说由于缺少测试）来作为信任这段代码的主要理由。</p>
+
+<p>Gems支持在代码包里添加测试文件，所以当下载完gem后我们就可以开始测湿了。有一个致力于此的社区已经出现，它的名字叫<a href="http://test.rubygems.org/">GemTesters</a>，这里有详细的文档介绍在不同的Ruby架构和解释器中运行gem测湿。</p>
+
+<p>一句话不割：请测试你的GEM！</p>
+
+<p><code>Test::Unit</code>是Ruby内置的测湿框架。网上狼哇多的<a href="https://github.com/seattlerb/minitest/blob/master/README.txt">教程</a>介绍如何使用它。当然还有许多其他的测试框架可用。Rspec是很流行的一个。说白了，不管你用哪个，测湿就行！</p>
+
+<p>下面咱们给女神加点测湿。需要再加几个文件：一个是Rakefile，还有一个全新的test文件夹：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% tree
+</span><span class='line'>.
+</span><span class='line'>├── Rakefile
+</span><span class='line'>├── bin
+</span><span class='line'>│   └── nvshen
+</span><span class='line'>├── nvshen.gemspec
+</span><span class='line'>├── lib
+</span><span class='line'>│   ├── nvshen
+</span><span class='line'>│   │   └── translator.rb
+</span><span class='line'>│   └── nvshen.rb
+</span><span class='line'>└── test
+</span><span class='line'>    └── test_nvshen.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rakefile可以让你自动跑测湿：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat Rakefile
+</span><span class='line'>require 'rake/testtask'
+</span><span class='line'>
+</span><span class='line'>Rake::TestTask.new do |t|
+</span><span class='line'>  t.libs &lt;&lt; 'test'
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>desc "Run tests"
+</span><span class='line'>task :default =&gt; :test</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在执行<code>rake test</code>或者就<code>rake</code>就能跑测湿啦。呵呵，下面是一个女神的基本测湿文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat test/test_nvshen.rb
+</span><span class='line'>require 'test/unit'
+</span><span class='line'>require 'nvshen'
+</span><span class='line'>
+</span><span class='line'>class NvshenTest &lt; Test::Unit::TestCase
+</span><span class='line'>  def test_english_hello
+</span><span class='line'>    assert_equal "hello nvshen",
+</span><span class='line'>      nvshen.hi("english")
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def test_any_hello
+</span><span class='line'>    assert_equal "hello nvshen",
+</span><span class='line'>      nvshen.hi("ruby")
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def test_spanish_hello
+</span><span class='line'>    assert_equal "你好 女神",
+</span><span class='line'>      nvshen.hi("chinese")
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后执行测湿：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% rake test
+</span><span class='line'>(in /Users/qrush/Dev/ruby/nvshen)
+</span><span class='line'>Loaded suite
+</span><span class='line'>Started
+</span><span class='line'>...
+</span><span class='line'>Finished in 0.000736 seconds.
+</span><span class='line'>
+</span><span class='line'>3 tests, 3 assertions, 0 failures, 0 errors, 0 skips
+</span><span class='line'>
+</span><span class='line'>Test run options: --seed 15331</span></code></pre></td></tr></table></div></figure>
+
+
+<p>绿灯通过！好吧，其实取决与你的shell配色。想学习更多的好例子，最佳实践就是去github瞎溜达并且读别人的代码。</p>
+
+<hr>
+
+
+<p><a id="document-code"></a></p>
+
+<h2>给代码写文档</h2>
+
+
+<p>大多数gems默认用RDoc来生成文档。有大量好的<a href="http://docs.seattlerb.org/rdoc/RDoc/Markup.html">教程</a>传授如何用RDoc来写文档。下面是一个简单示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># The main Nvshen driver
+</span><span class='line'>class Nvshen
+</span><span class='line'>  # Say hi to the world!
+</span><span class='line'>  #
+</span><span class='line'>  # Example:
+</span><span class='line'>  #   &gt;&gt; Nvshen.hi("chinese")
+</span><span class='line'>  #   =&gt; 你好 女神
+</span><span class='line'>  #
+</span><span class='line'>  # Arguments:
+</span><span class='line'>  #   language: (String)
+</span><span class='line'>
+</span><span class='line'>  def self.hi(language = "english")
+</span><span class='line'>    translator = Translator.new(language)
+</span><span class='line'>    puts translator.hi
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另一个出色的文档选择是<a href="http://yardoc.org/">YARD</a>，因为当你推送gem时，RubyDoc.info会通过你的gem自动生成YARDocs。 YARD向后兼容RDoc，并且有一篇文章<a href="http://rubydoc.info/docs/yard/file/docs/GettingStarted.md">很好的文章</a>介绍了他们的区别以及用法。</p>
+
+<hr>
+
+
+<p><a id="wrapup"></a></p>
+
+<h2>总结</h2>
+
+
+<p>有了一个构建RubyGem的基本理解，我们希望你将去亲自实践。</p>
+
+<hr>
+
+
+<p><a id="credits"></a></p>
+
+<h2>演员表</h2>
+
+
+<p>这篇教程借鉴了<a href="http://rubylearning.com/blog/2010/10/06/gem-sawyer-modern-day-ruby-warrior/">Gem Sawyer的Modern Day Ruby Warrior</a>，由<a href="http://i3zhe.github.com">Jerry Huo</a>翻译改编。如有巧合，纯属雷同！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Jerry Huo</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-31T11:17:00+08:00" pubdate data-updated="true">Oct 31<span>st</span>, 2012</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/" data-via="young4u_amy" data-counturl="http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/" title="Previous Post: 【翻译】如何制作自己的GEM (一)">&laquo; 【翻译】如何制作自己的GEM (一)</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/">如何制作自己的gem （二）</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/">【翻译】如何制作自己的GEM (一)</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/03/csv-rendered-by-fputcsv-does-not-separated-correctly/">CSV rendered by fputcsv does not separated correctly</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/28/fsockopen-error-failed-to-parse-address/">fsockopen error - failed to parse address</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/02/29/first-post/">First Post</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/i3zhe">@i3zhe</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'i3zhe',
+            count: 1,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("young4u_amy", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/young4u_amy" class="twitter-follow-button" data-show-count="false">Follow @young4u_amy</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Jerry Huo -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'young4u_amy';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/';
+        var disqus_url = 'http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

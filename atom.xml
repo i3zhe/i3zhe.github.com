@@ -4,7 +4,7 @@
   <title><![CDATA[YounG for You]]></title>
   <link href="http://i3zhe.github.com/atom.xml" rel="self"/>
   <link href="http://i3zhe.github.com/"/>
-  <updated>2012-10-30T09:48:50+08:00</updated>
+  <updated>2012-10-31T14:06:09+08:00</updated>
   <id>http://i3zhe.github.com/</id>
   <author>
     <name><![CDATA[Jerry Huo]]></name>
@@ -14,7 +14,221 @@
 
   
   <entry>
-    <title type="html"><![CDATA[【翻译】如何制作自己的GEM]]></title>
+    <title type="html"><![CDATA[如何制作自己的gem （二）]]></title>
+    <link href="http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er/"/>
+    <updated>2012-10-31T11:17:00+08:00</updated>
+    <id>http://i3zhe.github.com/blog/2012/10/31/ru-he-zhi-zuo-zi-ji-de-gemzhi-er</id>
+    <content type="html"><![CDATA[<p>接上篇，<a href="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/">如何制作自己的GEM (一)</a></p>
+
+<ul>
+<li><a href="#writing-tests">写测试</a></li>
+<li><a href="#document-code">给gem写文档</a></li>
+<li><a href="#wrapup">总结</a>
+<a id="writing-tests"></a></li>
+</ul>
+
+
+<h2>写测试</h2>
+
+
+<p>泰斯特你的gem是贼拉的重要！它不仅帮助你确认你的代码是可以运行的，而且它也帮助别人了解你的gem是顺利工作的。当衡量一个gem时，ruby开发者倾向于通过查看一套可靠的测试（或者说由于缺少测试）来作为信任这段代码的主要理由。</p>
+
+<p>Gems支持在代码包里添加测试文件，所以当下载完gem后我们就可以开始测湿了。有一个致力于此的社区已经出现，它的名字叫<a href="http://test.rubygems.org/">GemTesters</a>，这里有详细的文档介绍在不同的Ruby架构和解释器中运行gem测湿。</p>
+
+<p>一句话不割：请测试你的GEM！</p>
+
+<p><code>Test::Unit</code>是Ruby内置的测湿框架。网上狼哇多的<a href="https://github.com/seattlerb/minitest/blob/master/README.txt">教程</a>介绍如何使用它。当然还有许多其他的测试框架可用。Rspec是很流行的一个。说白了，不管你用哪个，测湿就行！</p>
+
+<p>下面咱们给女神加点测湿。需要再加几个文件：一个是Rakefile，还有一个全新的test文件夹：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% tree
+</span><span class='line'>.
+</span><span class='line'>├── Rakefile
+</span><span class='line'>├── bin
+</span><span class='line'>│   └── nvshen
+</span><span class='line'>├── nvshen.gemspec
+</span><span class='line'>├── lib
+</span><span class='line'>│   ├── nvshen
+</span><span class='line'>│   │   └── translator.rb
+</span><span class='line'>│   └── nvshen.rb
+</span><span class='line'>└── test
+</span><span class='line'>    └── test_nvshen.rb</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Rakefile可以让你自动跑测湿：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat Rakefile
+</span><span class='line'>require 'rake/testtask'
+</span><span class='line'>
+</span><span class='line'>Rake::TestTask.new do |t|
+</span><span class='line'>  t.libs &lt;&lt; 'test'
+</span><span class='line'>end
+</span><span class='line'>
+</span><span class='line'>desc "Run tests"
+</span><span class='line'>task :default =&gt; :test</span></code></pre></td></tr></table></div></figure>
+
+
+<p>现在执行<code>rake test</code>或者就<code>rake</code>就能跑测湿啦。呵呵，下面是一个女神的基本测湿文件：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% cat test/test_nvshen.rb
+</span><span class='line'>require 'test/unit'
+</span><span class='line'>require 'nvshen'
+</span><span class='line'>
+</span><span class='line'>class NvshenTest &lt; Test::Unit::TestCase
+</span><span class='line'>  def test_english_hello
+</span><span class='line'>    assert_equal "hello nvshen",
+</span><span class='line'>      nvshen.hi("english")
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def test_any_hello
+</span><span class='line'>    assert_equal "hello nvshen",
+</span><span class='line'>      nvshen.hi("ruby")
+</span><span class='line'>  end
+</span><span class='line'>
+</span><span class='line'>  def test_spanish_hello
+</span><span class='line'>    assert_equal "你好 女神",
+</span><span class='line'>      nvshen.hi("chinese")
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后执行测湿：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>% rake test
+</span><span class='line'>(in /Users/qrush/Dev/ruby/nvshen)
+</span><span class='line'>Loaded suite
+</span><span class='line'>Started
+</span><span class='line'>...
+</span><span class='line'>Finished in 0.000736 seconds.
+</span><span class='line'>
+</span><span class='line'>3 tests, 3 assertions, 0 failures, 0 errors, 0 skips
+</span><span class='line'>
+</span><span class='line'>Test run options: --seed 15331</span></code></pre></td></tr></table></div></figure>
+
+
+<p>绿灯通过！好吧，其实取决与你的shell配色。想学习更多的好例子，最佳实践就是去github瞎溜达并且读别人的代码。</p>
+
+<hr>
+
+
+<p><a id="document-code"></a></p>
+
+<h2>给代码写文档</h2>
+
+
+<p>大多数gems默认用RDoc来生成文档。有大量好的<a href="http://docs.seattlerb.org/rdoc/RDoc/Markup.html">教程</a>传授如何用RDoc来写文档。下面是一个简单示例：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'># The main Nvshen driver
+</span><span class='line'>class Nvshen
+</span><span class='line'>  # Say hi to the world!
+</span><span class='line'>  #
+</span><span class='line'>  # Example:
+</span><span class='line'>  #   &gt;&gt; Nvshen.hi("chinese")
+</span><span class='line'>  #   =&gt; 你好 女神
+</span><span class='line'>  #
+</span><span class='line'>  # Arguments:
+</span><span class='line'>  #   language: (String)
+</span><span class='line'>
+</span><span class='line'>  def self.hi(language = "english")
+</span><span class='line'>    translator = Translator.new(language)
+</span><span class='line'>    puts translator.hi
+</span><span class='line'>  end
+</span><span class='line'>end</span></code></pre></td></tr></table></div></figure>
+
+
+<p>另一个出色的文档选择是<a href="http://yardoc.org/">YARD</a>，因为当你推送gem时，RubyDoc.info会通过你的gem自动生成YARDocs。 YARD向后兼容RDoc，并且有一篇文章<a href="http://rubydoc.info/docs/yard/file/docs/GettingStarted.md">很好的文章</a>介绍了他们的区别以及用法。</p>
+
+<hr>
+
+
+<p><a id="wrapup"></a></p>
+
+<h2>总结</h2>
+
+
+<p>有了一个构建RubyGem的基本理解，我们希望你将去亲自实践。</p>
+
+<hr>
+
+
+<p><a id="credits"></a></p>
+
+<h2>演员表</h2>
+
+
+<p>这篇教程借鉴了<a href="http://rubylearning.com/blog/2010/10/06/gem-sawyer-modern-day-ruby-warrior/">Gem Sawyer的Modern Day Ruby Warrior</a>，由<a href="http://i3zhe.github.com">Jerry Huo</a>翻译改编。如有巧合，纯属雷同！</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[【翻译】如何制作自己的GEM (一)]]></title>
     <link href="http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem/"/>
     <updated>2012-10-29T14:00:00+08:00</updated>
     <id>http://i3zhe.github.com/blog/2012/10/29/ru-he-zhi-zuo-zi-ji-de-gem</id>
@@ -148,7 +362,7 @@
 </span><span class='line'>&gt;&gt; require 'nvshen'
 </span><span class='line'>=&gt; true
 </span><span class='line'>&gt;&gt; Nvshen.hi
-</span><span class='line'>Hello world!</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>Hello Nvshen!</span></code></pre></td></tr></table></div></figure>
 
 
 <p><em>如果你使用的ruby版本低于1.9.2，你需要使用<code>irb -rubygems</code>，或者运行irb之后再require rubygems库</em></p>
@@ -400,7 +614,7 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>% ruby -Ilib ./bin/hola
-</span><span class='line'>hello world
+</span><span class='line'>hello nvshen
 </span><span class='line'>
 </span><span class='line'>% ruby -Ilib ./bin/hola chinese
 </span><span class='line'>你好 女神</span></code></pre></td></tr></table></div></figure>
