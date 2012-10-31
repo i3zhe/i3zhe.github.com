@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "【翻译】如何制作自己的GEM"
+title: "【翻译】如何制作自己的GEM (一)"
 date: 2012-10-29 14:00
 comments: true
 categories: 
@@ -87,7 +87,7 @@ Successfully installed nvshen-0.0.0
 >> require 'nvshen'
 => true
 >> Nvshen.hi
-Hello world!
+Hello Nvshen!
 ```
 *如果你使用的ruby版本低于1.9.2，你需要使用`irb -rubygems`，或者运行irb之后再require rubygems库*
 
@@ -236,7 +236,7 @@ puts Nvshen.hi(ARGV[0])
 她的作用就是加载女神gem，然后把命令行第一个参数作为语言的变量来输出结果。下面是运行示例：
 ```
 % ruby -Ilib ./bin/hola
-hello world
+hello nvshen
 
 % ruby -Ilib ./bin/hola chinese
 你好 女神
