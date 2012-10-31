@@ -4,7 +4,7 @@
   <title><![CDATA[YounG for You]]></title>
   <link href="http://i3zhe.github.com/atom.xml" rel="self"/>
   <link href="http://i3zhe.github.com/"/>
-  <updated>2012-10-31T14:06:09+08:00</updated>
+  <updated>2012-10-31T14:09:20+08:00</updated>
   <id>http://i3zhe.github.com/</id>
   <author>
     <name><![CDATA[Jerry Huo]]></name>
@@ -213,7 +213,7 @@
 <h2>总结</h2>
 
 
-<p>有了一个构建RubyGem的基本理解，我们希望你将去亲自实践。</p>
+<p>有了一个构建RubyGem的基本思路，我们希望你将去亲自实践。</p>
 
 <hr>
 
