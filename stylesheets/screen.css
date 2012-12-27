@@ -47,7 +47,7 @@ button.css3button {
 }
 
 h1.scale {
-	width: 280px;
+	width: 350px;
 	-webkit-transition-property: scale;
 -webkit-transition-duration: 0.2s;
 -webkit-transition-timing-function: ease-in-out;
