@@ -116,6 +116,8 @@ function renderDeliciousLinks(items) {
   $('#delicious').html(output);
 }
 
+
+
 $.domReady(function() {
   testFeatures();
   wrapFlashVideos();
@@ -123,6 +125,11 @@ $.domReady(function() {
   addCodeLineNumbers();
   getNav();
   addSidebarToggler();
+  $('.css3button').click(function(){
+    $('.error').css({'display':'block'});
+    $('.error_section').css({'display':'block'});
+  });
+
 });
 
 // iOS scaling bug fix
